@@ -108,6 +108,25 @@ Home Assistant 2026.5+ already provides.
 > *raise* the level. If your unit moves the opposite way, flip UP/DOWN in
 > `pioneer_avr/receiver.py` (`set_bass_db` / `_step_tone`).
 
+## Action: `pioneer_rs232.send_command`
+
+Sends a raw command to the receiver and returns any reply lines — handy for
+testing commands the integration doesn't expose, or probing the receiver.
+Target any of the integration's `media_player` entities.
+
+```yaml
+action: pioneer_rs232.send_command
+target:
+  entity_id: media_player.vsx_92txh
+data:
+  command: "?P"      # without the trailing carriage return
+  timeout: 1.0       # optional, seconds to wait for replies
+response_variable: result
+```
+
+`result` looks like `{"command": "?P", "replies": ["PWR1"]}`. In Developer
+Tools → Actions, tick *"Return response data"* to see it.
+
 ## Protocol source
 
 Command and listening-mode tables are derived from

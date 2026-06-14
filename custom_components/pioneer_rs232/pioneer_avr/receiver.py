@@ -98,6 +98,7 @@ class PioneerReceiver:
         self._read_task: asyncio.Task[None] | None = None
         self._write_lock = asyncio.Lock()
         self._subscribers: list[StateCallback] = []
+        self._raw_listeners: list[Callable[[str], None]] = []
         self._connected = False
 
     # --- Connection lifecycle ----------------------------------------------
@@ -145,6 +146,27 @@ class PioneerReceiver:
         """Ask the receiver for its full current status."""
         for cmd in protocol.QUERIES.values():
             await self._send(cmd)
+
+    async def send_and_collect(
+        self, command: str, timeout: float = 1.0
+    ) -> list[str]:
+        """Send a raw command and return reply lines seen within ``timeout``.
+
+        Intended for ad-hoc queries from the send_command service. Replies are
+        still parsed into state as usual; this just also captures the raw text.
+        """
+        lines: list[str] = []
+
+        def collector(line: str) -> None:
+            lines.append(line)
+
+        self._raw_listeners.append(collector)
+        try:
+            await self._send(command)
+            await asyncio.sleep(timeout)
+        finally:
+            self._raw_listeners.remove(collector)
+        return lines
 
     def set_optimistic_power(self, on: bool) -> None:
         """Update main power locally and notify subscribers.
@@ -207,6 +229,8 @@ class PioneerReceiver:
                 self._notify(None)
 
     def _handle_line(self, line: str) -> None:
+        for listener in list(self._raw_listeners):
+            listener(line)
         update = protocol.parse_reply(line)
         if update is None:
             _LOGGER.debug("Unparsed reply: %r", line)

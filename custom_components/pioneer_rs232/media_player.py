@@ -3,7 +3,9 @@
 from __future__ import annotations
 
 import re
-from typing import Literal, cast
+from typing import Any, Literal, cast
+
+import voluptuous as vol
 
 from homeassistant.components.media_player import (
     MediaPlayerDeviceClass,
@@ -11,10 +13,15 @@ from homeassistant.components.media_player import (
     MediaPlayerEntityFeature,
     MediaPlayerState,
 )
-from homeassistant.core import HomeAssistant, callback
+from homeassistant.core import HomeAssistant, SupportsResponse, callback
 from homeassistant.exceptions import HomeAssistantError
+from homeassistant.helpers import config_validation as cv, entity_platform
 from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
+
+SERVICE_SEND_COMMAND = "send_command"
+ATTR_COMMAND = "command"
+ATTR_TIMEOUT = "timeout"
 
 from .const import DOMAIN, PioneerConfigEntry
 from .pioneer_avr import (
@@ -71,6 +78,19 @@ async def async_setup_entry(
             PioneerMediaPlayer(receiver, receiver.zone_3, config_entry, "zone_3")
         )
     async_add_entities(entities)
+
+    # Action to send an arbitrary command to the receiver and return any reply.
+    entity_platform.async_get_current_platform().async_register_entity_service(
+        SERVICE_SEND_COMMAND,
+        {
+            vol.Required(ATTR_COMMAND): cv.string,
+            vol.Optional(ATTR_TIMEOUT, default=1.0): vol.All(
+                vol.Coerce(float), vol.Range(min=0.1, max=5.0)
+            ),
+        },
+        "async_send_command",
+        supports_response=SupportsResponse.OPTIONAL,
+    )
 
 
 class PioneerMediaPlayer(MediaPlayerEntity):
@@ -211,3 +231,10 @@ class PioneerMediaPlayer(MediaPlayerEntity):
         if code is None:
             raise HomeAssistantError(f"Invalid sound mode: {sound_mode}")
         await cast(MainPlayer, self._player).select_listening_mode(code)
+
+    async def async_send_command(
+        self, command: str, timeout: float = 1.0
+    ) -> dict[str, Any]:
+        """Send a raw command to the receiver and return any reply lines."""
+        replies = await self._receiver.send_and_collect(command, timeout)
+        return {"command": command, "replies": replies}
