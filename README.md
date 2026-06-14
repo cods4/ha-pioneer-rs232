@@ -1,5 +1,9 @@
 # Pioneer VSX-92TXH RS-232 control
 
+<p align="center">
+  <img src="images/icon.png" width="160" alt="Pioneer RS-232 integration icon">
+</p>
+
 A Home Assistant integration (and a standalone test CLI) for controlling a
 Pioneer VSX-92TXH receiver over its RS-232 serial port.
 
