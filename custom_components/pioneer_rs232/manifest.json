@@ -10,5 +10,5 @@
   "issue_tracker": "https://github.com/cods4/ha-pioneer-rs232/issues",
   "loggers": ["pioneer_avr"],
   "requirements": ["serialx>=1.8.0"],
-  "version": "0.2.0"
+  "version": "0.2.1"
 }

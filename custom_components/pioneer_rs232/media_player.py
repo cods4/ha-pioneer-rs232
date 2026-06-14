@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import re
 from typing import Literal, cast
 
 from homeassistant.components.media_player import (
@@ -34,6 +35,21 @@ SOUND_MODE_TO_CODE: dict[str, str] = {}
 for _code, _name in SET_LISTENING_MODES.items():
     SOUND_MODE_TO_CODE.setdefault(_name, _code)
 SOUND_MODE_LIST = sorted(SOUND_MODE_TO_CODE)
+
+
+def _resolve_sound_mode_code(sound_mode: str) -> str | None:
+    """Resolve a sound-mode string to a 3-digit SR set code.
+
+    Accepts a mode name from the list, or a raw ``SRxxxx`` / numeric value
+    (as older scenes may have captured before the parser was fixed).
+    """
+    if (code := SOUND_MODE_TO_CODE.get(sound_mode)) is not None:
+        return code
+    if match := re.fullmatch(r"(?:SR)?(\d+)", sound_mode):
+        code = f"{int(match.group(1)):03d}"
+        if code in SET_LISTENING_MODES:
+            return code
+    return None
 
 
 async def async_setup_entry(
@@ -191,7 +207,7 @@ class PioneerMediaPlayer(MediaPlayerEntity):
 
     async def async_select_sound_mode(self, sound_mode: str) -> None:
         """Select a listening/surround mode (main zone)."""
-        code = SOUND_MODE_TO_CODE.get(sound_mode)
+        code = _resolve_sound_mode_code(sound_mode)
         if code is None:
             raise HomeAssistantError(f"Invalid sound mode: {sound_mode}")
         await cast(MainPlayer, self._player).select_listening_mode(code)

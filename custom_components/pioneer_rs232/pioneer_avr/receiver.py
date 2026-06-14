@@ -317,10 +317,13 @@ class MainPlayer(_BasePlayer):
         await self._receiver.send_raw("?P")
 
     async def power_standby(self) -> None:
-        """Put the main zone into standby and confirm the new state."""
+        """Put the main zone into standby.
+
+        Deliberately does *not* query ?P afterwards: the receiver emits an
+        unsolicited PWR1 when it receives PF, and polling it as it enters
+        standby can wake the amplifier straight back up on some models.
+        """
         await self._receiver.send_raw("PF")
-        await asyncio.sleep(0.4)
-        await self._receiver.send_raw("?P")
 
     async def set_volume(self, db: float) -> None:
         """Set the master volume in decibels."""

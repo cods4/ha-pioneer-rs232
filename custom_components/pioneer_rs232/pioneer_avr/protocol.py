@@ -143,8 +143,11 @@ def parse_reply(line: str) -> tuple[str, Any] | None:
         code = r[2:5]
         return ("listening_mode", LISTENING_MODE_NAMES.get(code, f"LM{code}"))
     if r.startswith("SR"):
-        code = r[2:]
-        return ("listening_mode_set", SET_LISTENING_MODES.get(code, f"SR{code}"))
+        raw = r[2:]
+        # The ?S status reply zero-pads the set code to 4 digits (e.g. SR0006),
+        # but the set-command table is keyed by 3-digit codes (006). Normalise.
+        code = f"{int(raw):03d}" if raw.isdigit() else raw
+        return ("listening_mode_set", SET_LISTENING_MODES.get(code, f"SR{raw}"))
     if r.startswith("TO"):
         return ("tone", r[2] == "1")
     if r.startswith("BA"):
