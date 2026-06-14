@@ -96,6 +96,7 @@ class PioneerReceiver:
         self._reader: asyncio.StreamReader | None = None
         self._writer: asyncio.StreamWriter | None = None
         self._read_task: asyncio.Task[None] | None = None
+        self._refresh_task: asyncio.Task[None] | None = None
         self._write_lock = asyncio.Lock()
         self._subscribers: list[StateCallback] = []
         self._raw_listeners: list[Callable[[str], None]] = []
@@ -129,6 +130,9 @@ class PioneerReceiver:
     async def disconnect(self) -> None:
         """Stop reading and close the serial port."""
         self._connected = False
+        if self._refresh_task is not None:
+            self._refresh_task.cancel()
+            self._refresh_task = None
         if self._read_task is not None:
             self._read_task.cancel()
             try:
@@ -229,6 +233,7 @@ class PioneerReceiver:
                 self._notify(None)
 
     def _handle_line(self, line: str) -> None:
+        _LOGGER.debug("RX %r", line)
         for listener in list(self._raw_listeners):
             listener(line)
         update = protocol.parse_reply(line)
@@ -237,10 +242,29 @@ class PioneerReceiver:
             return
         field_name, value = update
         if field_name in ("power", "zone2_power", "zone3_power"):
-            setattr(self.state, field_name, value is Power.ON if value else None)
+            new = value is Power.ON if value else None
+            # Main zone just came on (e.g. front-panel power button): the unit
+            # is now awake, so pull a full status refresh safely.
+            if field_name == "power" and new is True and self.state.power is not True:
+                self._schedule_refresh()
+            setattr(self.state, field_name, new)
         else:
             setattr(self.state, field_name, value)
         self._notify(self.state)
+
+    def _schedule_refresh(self) -> None:
+        """Query full state once, unless a refresh is already in flight."""
+        if not self._connected:
+            return
+        if self._refresh_task is not None and not self._refresh_task.done():
+            return
+        self._refresh_task = asyncio.create_task(self._safe_query_state())
+
+    async def _safe_query_state(self) -> None:
+        try:
+            await self.query_state()
+        except Exception:  # noqa: BLE001 - never let a refresh crash the loop
+            _LOGGER.exception("State refresh after power-on failed")
 
     def _notify(self, state: ReceiverState | None) -> None:
         for callback in list(self._subscribers):
