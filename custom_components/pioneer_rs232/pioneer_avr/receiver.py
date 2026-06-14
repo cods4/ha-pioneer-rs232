@@ -271,6 +271,26 @@ class MainPlayer(_BasePlayer):
     def listening_mode(self) -> str | None:
         return self._state.listening_mode
 
+    async def power_on(self) -> None:
+        """Turn the main zone on, robust against deep standby.
+
+        From standby the receiver's CPU is asleep: the first command only wakes
+        it (and is often dropped), and it does not reliably emit an unsolicited
+        ``PWR0``. So send ``PO`` twice, then read back the real state with
+        ``?P`` to drive a state update.
+        """
+        await self._receiver.send_raw("PO")
+        await asyncio.sleep(0.5)
+        await self._receiver.send_raw("PO")
+        await asyncio.sleep(0.8)
+        await self._receiver.send_raw("?P")
+
+    async def power_standby(self) -> None:
+        """Put the main zone into standby and confirm the new state."""
+        await self._receiver.send_raw("PF")
+        await asyncio.sleep(0.4)
+        await self._receiver.send_raw("?P")
+
     async def set_volume(self, db: float) -> None:
         """Set the master volume in decibels."""
         await self._receiver.send_raw(protocol.volume_set(db_to_raw(db), "main"))
