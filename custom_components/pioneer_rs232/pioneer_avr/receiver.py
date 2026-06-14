@@ -146,6 +146,15 @@ class PioneerReceiver:
         for cmd in protocol.QUERIES.values():
             await self._send(cmd)
 
+    def set_optimistic_power(self, on: bool) -> None:
+        """Update main power locally and notify subscribers.
+
+        Used for write-only transitions the receiver does not confirm on its
+        own (e.g. entering standby), where polling would wake it again.
+        """
+        self.state.power = on
+        self._notify(self.state)
+
     # --- Subscriptions ------------------------------------------------------
 
     def subscribe(self, callback: StateCallback) -> Callable[[], None]:
@@ -319,11 +328,13 @@ class MainPlayer(_BasePlayer):
     async def power_standby(self) -> None:
         """Put the main zone into standby.
 
-        Deliberately does *not* query ?P afterwards: the receiver emits an
-        unsolicited PWR1 when it receives PF, and polling it as it enters
-        standby can wake the amplifier straight back up on some models.
+        Deliberately does *not* query ?P afterwards: polling the receiver as it
+        enters standby can wake the amplifier straight back up (VSX-LX70). The
+        unit also doesn't reliably emit an unsolicited PWR1, so update the
+        state optimistically instead.
         """
         await self._receiver.send_raw("PF")
+        self._receiver.set_optimistic_power(False)
 
     async def set_volume(self, db: float) -> None:
         """Set the master volume in decibels."""
