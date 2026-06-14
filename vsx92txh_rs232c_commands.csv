@@ -1,0 +1,129 @@
+Type,Command,Name,Argument,Answer,Notes
+Status Request,?V,VOLUME LEVEL STATUS REQUEST,,VOLXX<CR+LF>,"00=Mute, 01=-80dB, 81=0dB, 93=+12dB"
+Status Request,?P,POWER STATUS REQUEST,,PWRX<CR+LF>,"0=ON, 1=OFF"
+Status Request,?M,MUTE STATUS REQUEST,,MUTX<CR+LF>,"0=ON, 1=OFF"
+Status Request,?F,FUNCTION MODE REQUEST,,FNXX<CR+LF>,"00=PHONO, 01=CD, 02=TUNER, 03=CDR, 04=DVD, 05=TV, 10=VIDEO or VIDEO1, 12=Multi CH, 14=VIDEO2, 15=DVR or DVR1, 16=DVR2, 17=iPod, 18=XM, 19=HDMI1, 20=HDMI2, 21=HDMI3, 25=BDP, 27=SIRIUS, 31=HDMI (cyclic)"
+Status Request,?S,LISTENING MODE SETTING REQUEST,,SRXXXX<CR+LF>,See Setting Modes
+Status Request,?L,LISTENING MODE REQUEST,,LMXXX<CR+LF>,See Listening Modes
+Status Request,?TO,TONE STATUS REQUEST,,TOX<CR+LF>,"0=BYPASS, 1=ON"
+Status Request,?BA,BASS STATUS REQUEST,,BAXX<CR+LF>,"00=+6, 06=0, 12=-6"
+Status Request,?TR,TREBLE STATUS REQUEST,,TRXX<CR+LF>,"00=+6, 06=0, 12=-6"
+Status Request,?PR,TUNER PRESET REQUEST,,PRXXX<CR+LF>,"A01=class A 1, A09=class A 9, A10=class A 0, B01=class B 1, B09=class B 9, B10=class B 0, C01=class C 1, C09=class C 9, C10=class C 0"
+Status Request,?FR,TUNER FREQ REQUEST,,FRXXXXX<CR+LF>,"A00890=AM 890kHz, A01024=AM 1024kHz, F09100=FM 91.00 MHz, F10010=FM 100.10MHz"
+Status Request,?AP,ZONE 2 POWER STATUS REQUEST,,APRX<CR+LF>,"0=ON, 1=OFF"
+Status Request,?BP,ZONE 3 POWER STATUS REQUEST,,BPRX<CR+LF>,"0=ON, 1=OFF"
+Status Request,?ZS,ZONE 2 FUNCTION STATUS REQUEST,,Z2FXX<CR+LF>,"00=PHONO, 01=CD, 02=TUNER, 03=CDR, 04=DVD, 05=TV, 10=VIDEO or VIDEO1, 12=Multi CH, 14=VIDEO2, 15=DVR or DVR1, 16=DVR2, 17=iPod, 18=XM, 19=HDMI1, 20=HDMI2, 21=HDMI3, 25=BDP, 27=SIRIUS, 31=HDMI (cyclic)"
+Status Request,?ZT,ZONE 3 FUNCTION STATUS REQUEST,,Z3FXX<CR+LF>,"00=PHONO, 01=CD, 02=TUNER, 03=CDR, 04=DVD, 05=TV, 10=VIDEO or VIDEO1, 12=Multi CH, 14=VIDEO2, 15=DVR or DVR1, 16=DVR2, 17=iPod, 18=XM, 19=HDMI1, 20=HDMI2, 21=HDMI3, 25=BDP, 27=SIRIUS, 31=HDMI (cyclic)"
+Status Request,?ZV,ZONE 2 VOLUME STATUS REQUEST,,ZVXX<CR+LF>,"00=Mute, 01=-80dB, 81=0dB, 93=+12dB"
+Status Request,?MC,MCACC POSITION REQUEST,,MCX<CR+LF>,"0=MCACC OFF, 1=MEMORY 1, 6=MEMORY 6"
+Status Request,?EX,SBch PROCESSING STATUS REQUEST,,EXXX<CR+LF>,"0=OFF, 1=ON, 2=AUTO"
+Status Request,?XM,XM channel REQUEST,000-255,XMXXX<CR+LF>,
+Status Request,?IS,PHASE CONTROL STATUS REQUEST,,ISX<CR+LF>,"0=OFF, 1=ON, 2=FULL BAND PHASE CONTROL ON"
+Status Request,?SI,Sirius channel REQUEST,000-255,SIXXX<CR+LF>,
+Operation,VU,VOLUME UP,,VOLXX<CR+LF>,
+Operation,VD,VOLUME DOWN,,VOLXX<CR+LF>,
+Operation,XXVL,VOLUME SET,00-93,VOLXX<CR+LF>,"00=Mute, 01=-80dB, 81=0dB, 93=+12dB"
+Operation,PO,POWER ON,,PWRX<CR+LF>,
+Operation,PF,POWER OFF,,PWRX<CR+LF>,
+Operation,MO,MUTE ON,,MUTX<CR+LF>,
+Operation,MF,MUTE OFF,,MUTX<CR+LF>,
+Operation,XXFN,FUNCTION MODE SET,00-31 (Function No.),FNXX<CR+LF>,"00=PHONO, 01=CD, 02=TUNER, 03=CDR, 04=DVD, 05=TV, 10=VIDEO or VIDEO1, 12=Multi CH, 14=VIDEO2, 15=DVR or DVR1, 16=DVR2, 17=iPod, 18=XM, 19=HDMI1, 20=HDMI2, 21=HDMI3, 25=BDP, 27=SIRIUS, 31=HDMI (cyclic)"
+Operation,FU,FUNCTION MODE UP,,FNXX<CR+LF>,
+Operation,XXXSR,LISTENING MODE SET,Listening Mode No.,SRXXX(X)<CR+LF>,See Setting Modes
+Operation,TO,TONE ON/BYPASS,,TOX<CR+LF>,"0=BYPASS, 1=ON"
+Operation,BI,BASS INCREMENT,,BAXX<CR+LF>,"00=+6, 06=0, 12=-6"
+Operation,BD,BASS DECREMENT,,BAXX<CR+LF>,"00=+6, 06=0, 12=-6"
+Operation,TI,TREBLE INCREMENT,,TRXX<CR+LF>,"00=+6, 06=0, 12=-6"
+Operation,TD,TREBLE DECREMENT,,TRXX<CR+LF>,"00=+6, 06=0, 12=-6"
+Operation,TB,TUNER BAND,,FRXXXXX<CR+LF>,"A00890=AM 890kHz, A01024=AM 1024kHz, F09100=FM 91.00 MHz, F10010=FM 100.10MHz"
+Operation,XTP,TUNER PRESET,0-9,PRXXX<CR+LF>,"01=1, 09=9, 10=0"
+Operation,TC,TUNER CLASS,,PRXXX<CR+LF>,"A=Class A, B=Class B, C=Class C"
+Operation,TPI,TUNER PRESET INCREMENT,,PRXXX<CR+LF>,
+Operation,TPD,TUNER PRESET DECREMENT,,PRXXX<CR+LF>,
+Operation,TFI,TUNER FREQ INCREMENT,,FRXXXXX<CR+LF>,
+Operation,TFD,TUNER FREQ DECREMENT,,FRXXXXX<CR+LF>,
+Operation,XXZS,ZONE2 FUNCTION MODE SET,,Z2FXX<CR+LF>,"00=PHONO, 01=CD, 02=TUNER, 03=CDR, 04=DVD, 05=TV, 10=VIDEO or VIDEO1, 12=Multi CH, 14=VIDEO2, 15=DVR or DVR1, 16=DVR2, 17=iPod, 18=XM, 19=HDMI1, 20=HDMI2, 21=HDMI3, 25=BDP, 27=SIRIUS, 31=HDMI (cyclic)"
+Operation,XXZT,ZONE3 FUNCTION MODE SET,,Z3FXX<CR+LF>,"00=PHONO, 01=CD, 02=TUNER, 03=CDR, 04=DVD, 05=TV, 10=VIDEO or VIDEO1, 12=Multi CH, 14=VIDEO2, 15=DVR or DVR1, 16=DVR2, 17=iPod, 18=XM, 19=HDMI1, 20=HDMI2, 21=HDMI3, 25=BDP, 27=SIRIUS, 31=HDMI (cyclic)"
+Operation,ZU,ZONE2 VOLUME UP,,ZVXX<CR+LF>,
+Operation,ZD,ZONE2 VOLUME DOWN,,ZVXX<CR+LF>,
+Operation,XXZV,ZONE2 VOLUME SET,00-80,ZVXX<CR+LF>,"00=Mute, 01=-80dB, 81=0dB, 93=+12dB"
+Operation,APO,ZONE2 POWER ON,,APRX<CR+LF>,
+Operation,APF,ZONE2 POWER OFF,,APRX<CR+LF>,
+Operation,BPO,ZONE3 POWER ON,,BPRX<CR+LF>,
+Operation,BPF,ZONE3 POWER OFF,,BPRX<CR+LF>,
+Operation,XMC,MCACC POSITION,0-6,MCX<CR+LF>,"0=MCACC OFF, 1=MEMORY 1, 6=MEMORY 6"
+Operation,XXEX,SBch PROCESSING SET,"0,1,2",EXXX<CR+LF>,"0=OFF, 1=ON, 2=AUTO"
+Operation,STS,STATUS DISPLAY,,,
+Operation,XIS,PHASE CONTROL,"0,1,2",ISX<CR+LF>,"0=OFF, 1=ON, 2=FULL BAND PHASE CONTROL ON"
+Operation,CUP,AMP CURSOR UP,,,
+Operation,CDN,AMP CURSOR DOWN,,,
+Operation,CRI,AMP CURSOR RIGHT,,,
+Operation,CLE,AMP CURSOR LEFT,,,
+Operation,CEN,AMP CURSOR ENTER,,,
+Operation,CRT,AMP RETURN,,,
+Operation,APA,AUDIO PARAMETER,,,
+Operation,VPA,VIDEO PARAMETER,,,
+Operation,KOF,"KEY OFF (for USB, NETWORK)",,,
+iPod Operation,001P,PLAY,,OSD Display Feedback,
+iPod Operation,01IP,PAUSE,,OSD Display Feedback,
+iPod Operation,021P,STOP,,OSD Display Feedback,
+iPod Operation,03IP,PREVIOUS,,OSD Display Feedback,
+iPod Operation,041P,NEXT,,OSD Display Feedback,
+iPod Operation,05IP,REV,,OSD Display Feedback,
+iPod Operation,061P,FWD,,OSD Display Feedback,
+iPod Operation,071P,REPEAT,,OSD Display Feedback,
+iPod Operation,08IP,SHUFFLE,,OSD Display Feedback,
+iPod Operation,09IP,DISPLAY,,OSD Display Feedback,
+iPod Operation,10IP,OSD ON/OFF,,OSD Display Feedback,
+iPod Operation,13IP,Cursor UP,,OSD Display Feedback,
+iPod Operation,14IP,Cursor DOWN,,OSD Display Feedback,
+iPod Operation,15IP,Cursor RIGHT,,OSD Display Feedback,
+iPod Operation,16IP,Cursor LEFT,,OSD Display Feedback,
+iPod Operation,17IP,ENTER,,OSD Display Feedback,
+iPod Operation,18IP,RETURN,,OSD Display Feedback,
+iPod Operation,19IP,CATEGORY,,OSD Display Feedback,
+XM Operation,100XM,STATION 10,,XM***<CR+LF>,
+XM Operation,01XM,XM Control Command 01,,XM***<CR+LF>,
+XM Operation,02XM,XM Control Command 02,,XM***<CR+LF>,
+XM Operation,03XM,XM Control Command 03,,XM***<CR+LF>,
+XM Operation,04XM,XM Control Command 04,,XM***<CR+LF>,
+XM Operation,05XM,XM Control Command 05,,XM***<CR+LF>,
+XM Operation,06XM,XM Control Command 06,,XM***<CR+LF>,
+XM Operation,07XM,XM Control Command 07,,XM***<CR+LF>,
+XM Operation,09XM,XM Control Command 09,,XM***<CR+LF>,
+XM Operation,10XM,CH+ / Cursor DOWN,,XM***<CR+LF>,
+XM Operation,11XM,CH- / Cursor UP,,XM***<CR+LF>,
+XM Operation,12XM,PRESET ST+ (->),,XM***<CR+LF>,
+XM Operation,13XM,PRESET ST- (<-),,XM***<CR+LF>,
+XM Operation,14XM,DISPLAY,,XM***<CR+LF>,
+XM Operation,15XM,PRESET CLASS,,XM***<CR+LF>,
+XM Operation,16XM,DIRECT ACCESS (CH),,XM***<CR+LF>,
+XM Operation,17XM,XM Control Command 17,,XM***<CR+LF>,
+XM Operation,18XM,MEMORY (EDIT),,XM***<CR+LF>,
+XM Operation,19XM,MENU,,XM***<CR+LF>,
+XM Operation,21XM,ENTER,,XM***<CR+LF>,
+XM Operation,22XM,RETURN,,XM***<CR+LF>,
+XM Operation,23XM,CATEGORY,,XM***<CR+LF>,
+Sirius Operation,100SI,STATION 10,,SI***<CR+LF>,
+Sirius Operation,01SI,Sirius Control Command 01,,SI***<CR+LF>,
+Sirius Operation,02SI,Sirius Control Command 02,,SI***<CR+LF>,
+Sirius Operation,03SI,Sirius Control Command 03,,SI***<CR+LF>,
+Sirius Operation,04SI,Sirius Control Command 04,,SI***<CR+LF>,
+Sirius Operation,05SI,Sirius Control Command 05,,SI***<CR+LF>,
+Sirius Operation,06SI,Sirius Control Command 06,,SI***<CR+LF>,
+Sirius Operation,07SI,Sirius Control Command 07,,SI***<CR+LF>,
+Sirius Operation,08SI,Sirius Control Command 08,,SI***<CR+LF>,
+Sirius Operation,09SI,Sirius Control Command 09,,SI***<CR+LF>,
+Sirius Operation,10SI,CH+ / Cursor DOWN,,SI***<CR+LF>,
+Sirius Operation,11SI,CH- / Cursor UP,,SI***<CR+LF>,
+Sirius Operation,12SI,PRESET ST+ (->),,SI***<CR+LF>,
+Sirius Operation,13SI,PRESET ST- (<-),,SI***<CR+LF>,
+Sirius Operation,14SI,DISPLAY,,SI***<CR+LF>,
+Sirius Operation,15SI,PRESET CLASS,,SI***<CR+LF>,
+Sirius Operation,16SI,DIRECT ACCESS (CH),,SI***<CR+LF>,
+Sirius Operation,17SI,Sirius Control Command 17,,SI***<CR+LF>,
+Sirius Operation,18SI,MEMORY (EDIT),,SI***<CR+LF>,
+Sirius Operation,19SI,MENU,,SI***<CR+LF>,
+Sirius Operation,21SI,ENTER,,SI***<CR+LF>,
+Sirius Operation,22SI,RETURN,,SI***<CR+LF>,
+Sirius Operation,23SI,CATEGORY,,SI***<CR+LF>,

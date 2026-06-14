@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# uv
+uv.lock
+
+# Build artefacts
+*.tar.gz
+
+# Editor / OS
+.vscode/
+.idea/
+*.swp
+.DS_Store
+*:Zone.Identifier
+
+# Third-party reference material (not ours to publish)
+Denon RS232/
+Pioneer VSX-LX70 RS232/

@@ -1,0 +1,233 @@
+"""Listening / surround mode tables for the Pioneer VSX-92TXH.
+
+Generated from vsx92txh_listening_surround_modes.csv - do not edit by hand;
+regenerate from the CSV if the tables need to change.
+"""
+
+# Codes accepted by the XXXSR "LISTENING MODE SET" command (?S returns these).
+SET_LISTENING_MODES: dict[str, str] = {
+    "001": "STEREO (cyclic)",  # STEREO
+    "003": "FRONT STAGE SURROUND ADVANCE FOCUS",  # STEREO
+    "004": "FRONT STAGE SURROUND ADVANCE WIDE",  # STEREO
+    "005": "AUTO SURROUND/STREAM DIRECT (same as key)",  # AUTO SURR
+    "006": "AUTO SURROUND",  # AUTO SURR
+    "007": "NORMAL DIRECT",  # AUTO SURR
+    "008": "PURE DIRECT",  # AUTO SURR
+    "009": "STEREO (direct command)",  # STEREO
+    "010": "STANDARD SELECTION (same as key)",  # STANDARD
+    "012": "PRO LOGIC",  # STANDARD
+    "013": "PRO LOGIC II MOVIE",  # STANDARD
+    "014": "PRO LOGIC II MUSIC",  # STANDARD
+    "015": "PRO LOGIC II GAME",  # STANDARD
+    "016": "Neo:6 CINEMA",  # STANDARD
+    "017": "Neo:6 MUSIC",  # STANDARD
+    "018": "PRO LOGIC IIx MOVIE",  # STANDARD
+    "019": "PRO LOGIC IIx MUSIC",  # STANDARD
+    "020": "PRO LOGIC IIx GAME",  # STANDARD
+    "021": "Depending on Source (for Multi-ch)",  # STANDARD
+    "022": "(Multi-Channel Source) + EX",  # STANDARD
+    "023": "(Multi-Channel Source) + PRO LOGIC IIx MOVIE",  # STANDARD
+    "024": "(Multi-Channel Source) + PRO LOGIC IIx MUSIC",  # STANDARD
+    "025": "DTS Neo:6",  # STANDARD
+    "026": "DTS-ES matrix6.1",  # STANDARD
+    "027": "DTS-ES discrete6.1",  # STANDARD
+    "028": "XM HD SURROUND",  # STANDARD
+    "029": "NEURAL THX",  # STANDARD
+    "030": "DTS-ES 8ch discrete",  # STANDARD
+    "050": "THX SELECTION (same as key)",  # HOME THX
+    "051": "PRO LOGIC + THX",  # HOME THX
+    "052": "PRO LOGIC II MOVIE + THX",  # HOME THX
+    "053": "Neo:6 CINEMA + THX",  # HOME THX
+    "054": "PRO LOGIC IIx MOVIE + THX",  # HOME THX
+    "055": "THX GAMES MODE",  # HOME THX
+    "056": "THX Depending on Source (for Multi-ch)",  # HOME THX
+    "057": "THX SURROUND EX",  # HOME THX
+    "058": "PRO LOGIC IIx MOVIE + THX",  # HOME THX
+    "059": "DTS Neo:6 + THX",  # HOME THX
+    "060": "DTS-ES MATRIX + THX",  # HOME THX
+    "061": "DTS-ES DISCRETE6.1 + THX",  # HOME THX
+    "062": "THX SELECT2",  # HOME THX
+    "063": "THX MUSICMODE SELECT",  # HOME THX
+    "064": "THX GAMES MODE (for multi-ch)",  # HOME THX
+    "067": "DTS-ES 8ch DISCRETE THX",  # HOME THX
+    "100": "ADVANCED SURROUND SELECTION (same as key)",  # ADV SURR
+    "101": "ACTION",  # ADV SURR
+    "102": "SCI-FI",  # ADV SURR
+    "103": "DRAMA",  # ADV SURR
+    "104": "ENTERTAINMENT SHOW (MUSICAL)",  # ADV SURR
+    "105": "MONO FILM",  # ADV SURR
+    "106": "EXPANDED THEATER (7-D THEATER)",  # ADV SURR
+    "107": "CLASSICAL",  # ADV SURR
+    "109": "UNPLUGGED (JAZZ)",  # ADV SURR
+    "110": "ROCK/POP (ROCK)",  # ADV SURR
+    "112": "EXTENDED STEREO (7CH-STEREO)",  # ADV SURR
+    "113": "PHONES SURROUND",  # ADV SURR
+    "116": "TV SURROUND",  # ADV SURR
+    "117": "SPORTS",  # ADV.SURR
+    "118": "ADV.GAME",  # ADV.SURR
+}
+
+# Codes returned by the ?L "LISTENING MODE REQUEST" (LMxxx) status reply.
+LISTENING_MODE_NAMES: dict[str, str] = {
+    "000": "PRO LOGIC II MOVIE",  # STANDARD
+    "001": "PRO LOGIC II MUSIC",  # STANDARD
+    "002": "PRO LOGIC",  # STANDARD
+    "003": "NEO6 CINEMA",  # STANDARD
+    "004": "NEO6 MUSIC",  # STANDARD
+    "005": "PRO LOGICII GAME",  # STANDARD
+    "008": "96kHz PRO LOGIC",  # STANDARD
+    "009": "96kHz PRO LOGICII MOVIE",  # STANDARD
+    "010": "96kHz PRO LOGIC II MUSIC",  # STANDARD
+    "011": "96kHz PRO LOGICII GAME",  # STANDARD
+    "015": "LPCM 96KHz",  # STANDARD
+    "016": "DOLBY DIGITAL",  # STANDARD
+    "017": "DOLBY DIGITAL EX",  # STANDARD
+    "019": "DTS",  # STANDARD
+    "022": "DTS-ES DISC 6.1",  # STANDARD
+    "023": "DTS-ES MTRX 6.1",  # STANDARD
+    "028": "MPEG-2 AAC EX",  # STANDARD
+    "030": "DTS 96/24",  # STANDARD
+    "031": "PCM",  # STANDARD
+    "032": "ACTION",  # ADV.SURR
+    "033": "SCIFI",  # ADV.SURR
+    "034": "DRAMA",  # ADV.SURR
+    "035": "ENTERTAINMENT SHOW (MUSICAL)",  # ADV.SURR
+    "036": "MONOFILM",  # ADV.SURR
+    "043": "EXPANDED THEATER (7-D THEATER)",  # ADV SURR
+    "050": "PRO LOGIC IIx MOVIE",  # STANDARD
+    "051": "PRO LOGIC IIx MUSIC",  # STANDARD
+    "052": "NEO6 96K CINEMA",  # STANDARD
+    "053": "NEO6 96K MUSIC",  # STANDARD
+    "054": "NEO6 88K CINEMA",  # STANDARD
+    "055": "NEO6 88K MUSIC",  # STANDARD
+    "056": "PRO LOGIC IIx GAME",  # STANDARD
+    "057": "96kHz PRO LOGIC IIx MOVIE",  # STANDARD
+    "058": "96kHz PRO LOGIC IIx MUSIC",  # STANDARD
+    "059": "96kHz PRO LOGIC IIx GAME",  # STANDARD
+    "080": "THX CINEMA",  # THX
+    "081": "THX SURROUND EX",  # THX
+    "083": "THX MUSIC MODE SELECT",  # THX
+    "085": "DTS Neo6+ THX",  # THX
+    "087": "PRO LOGIC IIx MOVIE THX",  # THX
+    "096": "CLASSICAL",  # ADV.SURR
+    "098": "UNPLUGGED (JAZZ)",  # ADV SURR
+    "099": "ROCK/POP (ROCK)",  # ADV.SURR
+    "107": "EXTENDED STEREO (7CH-STEREO)",  # ADV SURR
+    "122": "NEURAL THX",  # etc
+    "123": "XM HD SURROUND",  # etc
+    "124": "SACD DIRECT",  # etc
+    "125": "PCM DIRECT",  # etc
+    "126": "ANALOG DIRECT",  # etc
+    "128": "STEREO",  # STEREO
+    "134": "192kHz STEREO",  # STEREO
+    "135": "FRONT STAGE SURROUND ADVANCE FOCUS",  # STEREO
+    "136": "FRONT STAGE SURROUND ADVANCE WIDE",  # STEREO
+    "140": "PCM88.2kHz + PRO LOGIC",  # STANDARD
+    "141": "PCM88.2kHz + PRO LOGIC II MOVIE",  # STANDARD
+    "142": "PCM88.2kHz + PRO LOGIC II MUSIC",  # STANDARD
+    "143": "PCM88.2kHz + PRO LOGIC II GAME",  # STANDARD
+    "144": "PCM88.2kHz + PRO LOGIC IIx MOVIE (for 2ch)",  # STANDARD
+    "145": "PCM88.2kHz + PRO LOGIC IIx MUSIC (for 2ch)",  # STANDARD
+    "146": "PCM88.2kHz + PRO LOGIC IIx GAME",  # STANDARD
+    "154": "DOLBY DIGITAL PRO LOGIC II MOVIE",  # STANDARD
+    "155": "DOLBY DIGITAL PRO LOGIC IIx MUSIC",  # STANDARD
+    "156": "DTS + PRO LOGIC II MOVIE",  # STANDARD
+    "157": "DTS + PRO LOGIC II MUSIC",  # STANDARD
+    "158": "MPEG-2 AAC + PRO LOGIC II MOVIE",  # STANDARD
+    "159": "MPEG-2 AAC + PRO LOGIC II MUSIC",  # STANDARD
+    "162": "PCM88.2kHz + PRO LOGIC IIx MOVIE (for multichannel)",  # STANDARD
+    "163": "PCM88.2kHz + PRO LOGIC IIx MUSIC (for multichannel)",  # STANDARD
+    "164": "PCM96kHz + PRO LOGIC IIx MOVIE (for multichannel)",  # STANDARD
+    "165": "PCM96kHz + PRO LOGIC IIx MUSIC (for multichannel)",  # STANDARD
+    "166": "DTS Express",  # STANDARD
+    "167": "DTS-HD HIGH RESOLUTION",  # STANDARD
+    "168": "DTS-HD MASTER AUDIO",  # STANDARD
+    "169": "DOLBY DIGITAL PLUS",  # STANDARD
+    "170": "DOLBY DIGITAL PLUS EX",  # STANDARD
+    "171": "DOLBY DIGITAL PLUS + PRO LOGIC II MOVIE",  # STANDARD
+    "172": "DOLBY DIGITAL PLUS + PRO LOGIC II MUSIC",  # STANDARD
+    "173": "DOLBY DIGITAL PLUS + PRO LOGIC IIx MOVIE + THX",  # STANDARD
+    "174": "DOLBY TrueHD",  # STANDARD
+    "175": "DOLBY TrueHD EX",  # STANDARD
+    "176": "DOLBY TrueHD + PRO LOGIC IIx MOVIE",  # STANDARD
+    "177": "DOLBY TrueHD + PRO LOGIC IIx MUSIC",  # STANDARD
+    "178": "DOLBY TrueHD + PRO LOGIC II MOVIE + THX",  # STANDARD
+    "179": "DTS-(HD)ES 8ch Discrete",  # STANDARD
+    "181": "TV SURROUND",  # ADV.SURR
+    "182": "SPORTS",  # ADV SURR
+    "183": "GAME",  # ADV.SURR
+    "185": "PHONES SURROUND",  # ADV.SURR
+    "213": "MULTI-CH IN",  # STANDARD
+    "219": "HDMI THROUGH",  # STANDARD
+    "220": "PRO LOGIC + THX",  # THX
+    "221": "PRO LOGICII MOVIE THX",  # THX
+    "222": "Neo:6 CINEMA THX",  # THX
+    "223": "THX GAMES MODE (for 2ch)",  # THX
+    "230": "DOLBY DIGITAL PRO LOGIC IIx MOVIE + THX",  # THX
+    "231": "DTS + PRO LOGIC II MOVIE + THX",  # THX
+    "232": "DTS-ES MATRIX6.1 + THX",  # THX
+    "233": "DTS-ES DISCRETE6.1 + THX",  # THX
+    "234": "MPEG-2 AAC + PRO LOGIC II MOVIE THX",  # THX
+    "235": "WMA 9 Pro + PRO LOGIC II MOVIE + THX",  # THX
+    "236": "THX SELECT2 CINEMA",  # THX
+    "237": "THX GAMES MODE (for multichannel)",  # THX
+    "238": "PCM PRO LOGIC MOVIE THX",  # THX
+    "239": "DTS-(HD)ES 8ch Discrete + THX",  # THX
+    "240": "DTS-(HD)ES Discrete + THX",  # THX
+    "241": "DTS-(HD)ES Matrix + THX",  # THX
+    "248": "DTS-(HD)ES Matrix",  # STANDARD
+    "249": "DTS-(HD)ES Discrete",  # STANDARD
+    "250": "DVD-AUDIO PRO LOGIC",  # STANDARD
+    "251": "DVD-AUDIO PRO LOGIC MOVIE",  # STANDARD
+    "252": "DVD-AUDIO PRO LOGIC MUSIC",  # STANDARD
+    "253": "DVD-AUDIO PRO LOGIC GAME",  # STANDARD
+    "254": "DVD-AUDIO PRO LOGIC MOVIE (for 2ch)",  # STANDARD
+    "255": "DVD-AUDIO PRO LOGIC IIx MUSIC (for 2ch)",  # STANDARD
+    "256": "DVD-AUDIO PRO LOGIC II GAME",  # STANDARD
+    "257": "DVD-AUDIO PRO LOGIC II MOVIE (for multichannel)",  # STANDARD
+    "258": "DVD-AUDIO PRO LOGIC MUSIC (for multichannel)",  # STANDARD
+    "260": "DVD-AUDIO 88.2k + PRO LOGIC",  # STANDARD
+    "270": "DVD-AUDIO 96k + PRO LOGIC",  # STANDARD
+    "280": "SACD + PRO LOGIC",  # STANDARD
+    "281": "SACD PRO LOGIC II MOVIE",  # STANDARD
+    "282": "SACD + PRO LOGIC II MUSIC",  # STANDARD
+    "283": "SACD PRO LOGIC II GAME",  # STANDARD
+    "284": "SACD + PRO LOGIC MOVIE (for 2ch)",  # STANDARD
+    "285": "SACD PRO LOGIC II X MUSIC (for 2ch)",  # STANDARD
+    "286": "SACD + PRO LOGIC II GAME",  # STANDARD
+    "287": "SACD PRO LOGIC IIX MOVIE (for multichannel)",  # STANDARD
+    "288": "SACD + PRO LOGIC II MUSIC (for multichannel)",  # STANDARD
+    "300": "PCM 88.2KHz",  # STANDARD
+    "302": "PCM 176.4KHz",  # STANDARD
+    "303": "PCM 192KHz",  # STANDARD
+    "304": "PCM 88.2KHz STEREO",  # STEREO
+    "305": "PCM 96KHz STEREO",  # STEREO
+    "306": "PCM 176.4KHz STEREO",  # STEREO
+    "307": "PCM 192KHz STEREO",  # STEREO
+    "322": "DTS 96/24 STEREO",  # STEREO
+    "324": "DTS Neo:6",  # STANDARD
+    "330": "PCM + EX",  # STANDARD
+    "331": "PCM 88.2 + EX",  # STANDARD
+    "332": "PCM 96 + EX",  # STANDARD
+    "333": "PCM + PRO LOGIC II MOVIE (for multichannel)",  # STANDARD
+    "334": "PCM PRO LOGIC IIx MUSIC (for multichannel)",  # STANDARD
+    "340": "SACD",  # STANDARD
+    "342": "SACD STEREO",  # STEREO
+    "344": "SACD + EX",  # STANDARD
+    "350": "DVD-AUDIO",  # STANDARD
+    "351": "DVD-AUDIO 88.2KHz",  # STANDARD
+    "356": "DVD-AUDIO STEREO",  # STEREO
+    "358": "DVD-AUDIO 88.2KHz STEREO",  # STEREO
+    "360": "DVD-AUDIO 96KHZ STEREO",  # STEREO
+    "362": "DVD-AUDIO 176KHz STEREO",  # STEREO
+    "363": "DVD-AUDIO 192KHz STEREO",  # STEREO
+    "366": "DVD AUDIO + EX",  # STANDARD
+    "367": "DVD-AUDIO 88.2KHz + EX",  # STANDARD
+    "368": "DVD-AUDIO 96KHz + EX",  # STANDARD
+    "371": "DTS 96/24 + Neo:6",  # STANDARD
+    "372": "DTS 96/24 ES MATRIX",  # STANDARD
+    "380": "WMA 9 PRO",  # STANDARD
+    "382": "WMA PRO + EX",  # STANDARD
+    "384": "WMA 9 Pro + PRO LOGIC II MOVIE",  # STANDARD
+    "385": "WMA 9 Pro + PRO LOGIC IIx MUSIC",  # STANDARD
+}
