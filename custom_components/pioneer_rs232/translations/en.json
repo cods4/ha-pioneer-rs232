@@ -47,6 +47,54 @@
           }
         }
       }
+    },
+    "sensor": {
+      "audio_format": {
+        "name": "Audio format"
+      }
+    },
+    "switch": {
+      "tone": {
+        "name": "Tone control"
+      }
+    },
+    "number": {
+      "bass": {
+        "name": "Bass"
+      },
+      "treble": {
+        "name": "Treble"
+      }
+    },
+    "select": {
+      "phase_control": {
+        "name": "Phase control",
+        "state": {
+          "off": "Off",
+          "on": "On",
+          "full_band": "Full band phase control"
+        }
+      },
+      "sb_processing": {
+        "name": "Surround back processing",
+        "state": {
+          "off": "Off",
+          "on": "On",
+          "auto": "Auto"
+        }
+      },
+      "mcacc": {
+        "name": "MCACC memory",
+        "state": {
+          "off": "Off",
+          "memory_1": "Memory 1",
+          "memory_2": "Memory 2",
+          "memory_3": "Memory 3",
+          "memory_4": "Memory 4",
+          "memory_5": "Memory 5",
+          "memory_6": "Memory 6"
+        }
+      }
     }
   }
 }

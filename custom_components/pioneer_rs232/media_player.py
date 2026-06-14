@@ -150,7 +150,8 @@ class PioneerMediaPlayer(MediaPlayerEntity):
         if self._is_main:
             main = cast(MainPlayer, self._player)
             self._attr_is_volume_muted = main.mute
-            self._attr_sound_mode = main.listening_mode
+            # The selected listening mode (SR), matching sound_mode_list.
+            self._attr_sound_mode = main.selected_listening_mode
 
     async def async_turn_on(self) -> None:
         """Turn the zone on."""

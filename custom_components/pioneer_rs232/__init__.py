@@ -10,7 +10,13 @@ from homeassistant.exceptions import ConfigEntryNotReady
 from .const import LOGGER, PioneerConfigEntry
 from .pioneer_avr import PioneerReceiver, ReceiverState
 
-PLATFORMS = [Platform.MEDIA_PLAYER]
+PLATFORMS = [
+    Platform.MEDIA_PLAYER,
+    Platform.NUMBER,
+    Platform.SELECT,
+    Platform.SENSOR,
+    Platform.SWITCH,
+]
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: PioneerConfigEntry) -> bool:

@@ -87,6 +87,21 @@ TREBLE_DOWN = "TD"
 STATUS_DISPLAY = "STS"
 
 
+def phase_control(value: int) -> str:
+    """Build a phase-control set command (0=off, 1=on, 2=full band)."""
+    return f"{value}IS"
+
+
+def sb_processing(value: int) -> str:
+    """Build a surround-back processing set command (0=off, 1=on, 2=auto)."""
+    return f"{value}EX"
+
+
+def mcacc(value: int) -> str:
+    """Build an MCACC memory-position set command (0=off, 1..6=memory)."""
+    return f"{value}MC"
+
+
 # --- Reply parser -----------------------------------------------------------
 #
 # Each entry: prefix -> (field, value-length, decoder). Longest/most-specific

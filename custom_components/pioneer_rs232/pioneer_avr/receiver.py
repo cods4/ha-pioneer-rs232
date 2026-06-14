@@ -24,6 +24,7 @@ from .const import (
     db_to_raw,
     raw_to_db,
     tone_code_to_db,
+    tone_db_to_code,
 )
 from .models import VSX_92TXH, ReceiverModel
 
@@ -269,7 +270,37 @@ class MainPlayer(_BasePlayer):
 
     @property
     def listening_mode(self) -> str | None:
+        """Active decoded format (the LM status, e.g. 'DTS-HD MASTER AUDIO')."""
         return self._state.listening_mode
+
+    @property
+    def selected_listening_mode(self) -> str | None:
+        """The listening mode currently selected (the SR setting)."""
+        return self._state.listening_mode_set
+
+    @property
+    def tone(self) -> bool | None:
+        return self._state.tone
+
+    @property
+    def bass_db(self) -> int | None:
+        return self._state.bass_db
+
+    @property
+    def treble_db(self) -> int | None:
+        return self._state.treble_db
+
+    @property
+    def phase_control(self) -> str | None:
+        return self._state.phase_control
+
+    @property
+    def sb_processing(self) -> str | None:
+        return self._state.sb_processing
+
+    @property
+    def mcacc(self) -> str | None:
+        return self._state.mcacc
 
     async def power_on(self) -> None:
         """Turn the main zone on, robust against deep standby.
@@ -311,20 +342,52 @@ class MainPlayer(_BasePlayer):
         """Select a listening/surround mode by its 3-digit SR code."""
         await self._receiver.send_raw(protocol.listening_mode(code))
 
-    async def toggle_tone(self) -> None:
-        await self._receiver.send_raw(protocol.TONE_TOGGLE)
+    async def set_tone(self, on: bool) -> None:
+        """Enable or bypass tone control. The protocol only offers a toggle
+        (``TO``), so toggle only when the current state differs."""
+        if self._state.tone is None or self._state.tone != on:
+            await self._receiver.send_raw(protocol.TONE_TOGGLE)
 
-    async def bass_up(self) -> None:
-        await self._receiver.send_raw(protocol.BASS_UP)
+    async def set_bass_db(self, db: int) -> None:
+        """Set bass to an absolute dB value (+6..-6) by stepping BI/BD.
 
-    async def bass_down(self) -> None:
-        await self._receiver.send_raw(protocol.BASS_DOWN)
+        There is no absolute bass command, only increment/decrement, so we
+        step from the current level. ``BI`` raises the level (and lowers the
+        BA code); if your unit moves the opposite way, swap UP/DOWN here.
+        """
+        await self._step_tone(
+            self._state.bass_code, db, protocol.BASS_UP, protocol.BASS_DOWN
+        )
 
-    async def treble_up(self) -> None:
-        await self._receiver.send_raw(protocol.TREBLE_UP)
+    async def set_treble_db(self, db: int) -> None:
+        """Set treble to an absolute dB value (+6..-6) by stepping TI/TD."""
+        await self._step_tone(
+            self._state.treble_code, db, protocol.TREBLE_UP, protocol.TREBLE_DOWN
+        )
 
-    async def treble_down(self) -> None:
-        await self._receiver.send_raw(protocol.TREBLE_DOWN)
+    async def _step_tone(
+        self, current_code: int | None, target_db: int, up: str, down: str
+    ) -> None:
+        if current_code is None:
+            return
+        target_code = tone_db_to_code(target_db)
+        # Higher dB == lower code; `up` raises dB, i.e. lowers the code.
+        steps = current_code - target_code
+        cmd = up if steps > 0 else down
+        for _ in range(abs(steps)):
+            await self._receiver.send_raw(cmd)
+
+    async def set_phase_control(self, value: int) -> None:
+        """Set phase control (0=off, 1=on, 2=full band phase control)."""
+        await self._receiver.send_raw(protocol.phase_control(value))
+
+    async def set_sb_processing(self, value: int) -> None:
+        """Set surround-back processing (0=off, 1=on, 2=auto)."""
+        await self._receiver.send_raw(protocol.sb_processing(value))
+
+    async def set_mcacc(self, value: int) -> None:
+        """Set the MCACC memory position (0=off, 1..6=memory slot)."""
+        await self._receiver.send_raw(protocol.mcacc(value))
 
 
 class ZonePlayer(_BasePlayer):

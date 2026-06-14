@@ -80,6 +80,30 @@ This is a **custom integration**, distributed through
 ships inside the component; the only external requirement is `serialx`, which
 Home Assistant 2026.5+ already provides.
 
+## Entities
+
+| Entity | Type | Notes |
+| ------ | ---- | ----- |
+| Receiver (main) | media_player | Power, volume, mute, source, sound mode (selected listening mode) |
+| Zone 2 | media_player | Power, volume, source |
+| Zone 3 | media_player | Power, source (no volume — not in the protocol) |
+| Audio format | sensor | The format currently being decoded (`?L`/`LM`), e.g. *DTS-HD MASTER AUDIO* |
+| Tone control | switch | Tone on / bypass |
+| Bass / Treble | number | −6…+6 dB (stepped via `BI`/`BD`, `TI`/`TD`) |
+| Phase control | select | Off / On / Full band |
+| Surround back processing | select | Off / On / Auto |
+| MCACC memory | select | Off / Memory 1…6 |
+
+> **Sound mode vs Audio format:** the media player's *sound mode* is the
+> listening mode you *select* (`?S`/`SR`). The **Audio format** sensor reports
+> what the receiver is actually *decoding* (`?L`/`LM`) — that's the one that
+> shows DTS-HD MA, Dolby TrueHD, PCM, etc.
+
+> **Bass/Treble direction:** there is no absolute bass/treble command, so the
+> number entities step with the increment/decrement commands assuming `BI`/`TI`
+> *raise* the level. If your unit moves the opposite way, flip UP/DOWN in
+> `pioneer_avr/receiver.py` (`set_bass_db` / `_step_tone`).
+
 ## Protocol source
 
 Command and listening-mode tables are derived from
