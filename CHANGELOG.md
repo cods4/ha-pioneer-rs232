@@ -1,0 +1,26 @@
+# Changelog
+
+## 0.3.1
+- Detect manual power-on: an unsolicited `PWR0` (front-panel button, remote)
+  now flips the entity On and triggers a full status refresh.
+- Log every received line at debug (`RX '...'`) to aid troubleshooting.
+
+## 0.3.0
+- New action `pioneer_rs232.send_command`: send a raw command and get the
+  reply back (supports response data).
+
+## 0.2.2
+- Mark main power Off optimistically on standby (the receiver doesn't report
+  standby over serial, and polling it would wake the amplifier).
+
+## 0.2.1
+- Fix power-off re-waking the amplifier (no longer polls `?P` after `PF`).
+- Normalise the 4-digit `?S` sound-mode status code so scenes apply correctly.
+
+## 0.2.0
+- Add Audio format sensor; Tone switch; Bass/Treble numbers; Phase control,
+  Surround-back processing and MCACC memory selects.
+
+## 0.1.x
+- Initial release: media_player for main + Zone 2/3, serialx transport
+  (local serial and ESPHome serial proxy), config flow, HACS packaging.

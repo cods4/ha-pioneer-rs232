@@ -4,6 +4,13 @@
   <img src="images/icon.png" width="160" alt="Pioneer RS-232 integration icon">
 </p>
 
+<p align="center">
+  <a href="https://github.com/cods4/ha-pioneer-rs232/actions/workflows/validate.yml"><img src="https://github.com/cods4/ha-pioneer-rs232/actions/workflows/validate.yml/badge.svg" alt="Validate"></a>
+  <a href="https://github.com/hacs/integration"><img src="https://img.shields.io/badge/HACS-Custom-41BDF5.svg" alt="HACS Custom"></a>
+  <img src="https://img.shields.io/badge/Home%20Assistant-2026.5%2B-41BDF5.svg" alt="Home Assistant 2026.5+">
+  <img src="https://img.shields.io/github/v/release/cods4/ha-pioneer-rs232" alt="Release">
+</p>
+
 A Home Assistant integration (and a standalone test CLI) for controlling a
 Pioneer VSX-92TXH receiver over its RS-232 serial port.
 
@@ -73,11 +80,16 @@ This is a **custom integration**, distributed through
 
 **Via HACS (recommended):**
 
-1. HACS → ⋮ → **Custom repositories**.
-2. Add `https://github.com/cods4/ha-pioneer-rs232` with category **Integration**.
-3. Install **Pioneer RS-232**, then restart Home Assistant.
-4. **Settings → Devices & Services → Add Integration → Pioneer RS-232**, and pick
+[![Open in HACS](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=cods4&repository=ha-pioneer-rs232&category=integration)
+
+1. Click the badge above (or HACS → ⋮ → **Custom repositories**, add
+   `https://github.com/cods4/ha-pioneer-rs232`, category **Integration**).
+2. Install **Pioneer RS-232**, then restart Home Assistant.
+3. **Settings → Devices & Services → Add Integration → Pioneer RS-232**, and pick
    the serial port (your ESPHome `RS232 Proxy Port` or a local `/dev/tty…`).
+
+> Once accepted into the HACS default store, the custom-repository step won't
+> be needed — you'll be able to search for "Pioneer RS-232" directly in HACS.
 
 **Manual:** copy `custom_components/pioneer_rs232/` into your Home Assistant
 `config/custom_components/` directory and restart. The `pioneer_avr` library
