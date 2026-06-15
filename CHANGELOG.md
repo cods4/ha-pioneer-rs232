@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.3.2
+- Tolerate leading line-noise on power-up: the receiver prepends junk to its
+  first message as the RS-232 line settles (e.g. `P\x00PWR0`), which previously
+  went unparsed so manual power-on wasn't detected. Control bytes are now
+  stripped and a few bytes of leading noise are skipped. Parsing is also
+  hardened against malformed power/tone tokens.
+
 ## 0.3.1
 - Detect manual power-on: an unsolicited `PWR0` (front-panel button, remote)
   now flips the entity On and triggers a full status refresh.

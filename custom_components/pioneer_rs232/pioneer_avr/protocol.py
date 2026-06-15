@@ -109,9 +109,31 @@ def mcacc(value: int) -> str:
 def parse_reply(line: str) -> tuple[str, Any] | None:
     """Decode one reply line into a ``(field, value)`` state update.
 
-    Returns ``None`` for blank lines or replies we do not track.
+    Returns ``None`` for blank lines or replies we do not track. Tolerates a
+    few bytes of leading line-noise: as the RS-232 line settles on power-up the
+    receiver can prepend junk to the first message (observed: ``P\\x00PWR0``).
     """
-    r = line.strip().upper()
+    r = _clean(line)
+    if not r:
+        return None
+    for start in range(min(len(r), 6)):
+        if (result := _parse_token(r[start:])) is not None:
+            return result
+    return None
+
+
+def _clean(line: str) -> str:
+    """Upper-case and drop non-printable bytes (e.g. NULs, replacement chars)."""
+    return "".join(c for c in line.strip().upper() if 0x20 <= ord(c) <= 0x7E)
+
+
+def _power(ch: str) -> Power | None:
+    """Map a power digit to Power, or None if it isn't 0/1."""
+    return {"0": Power.ON, "1": Power.OFF}.get(ch)
+
+
+def _parse_token(r: str) -> tuple[str, Any] | None:
+    """Decode a single (already-cleaned) reply token."""
     if not r:
         return None
 
@@ -120,17 +142,17 @@ def parse_reply(line: str) -> tuple[str, Any] | None:
         return ("error", r)
 
     # 3-character prefixes first so they win over their 2-char neighbours.
-    if r.startswith("PWR"):
-        return ("power", Power(r[3]))
+    if r.startswith("PWR") and len(r) > 3:
+        return ("power", p) if (p := _power(r[3])) else None
     if r.startswith("VOL"):
         return ("volume_raw", _int(r[3:]))
-    if r.startswith("MUT"):
+    if r.startswith("MUT") and len(r) > 3:
         # 0 = mute ON (muted), 1 = mute OFF.
         return ("mute", r[3] == "0")
-    if r.startswith("APR"):
-        return ("zone2_power", Power(r[3]))
-    if r.startswith("BPR"):
-        return ("zone3_power", Power(r[3]))
+    if r.startswith("APR") and len(r) > 3:
+        return ("zone2_power", p) if (p := _power(r[3])) else None
+    if r.startswith("BPR") and len(r) > 3:
+        return ("zone3_power", p) if (p := _power(r[3])) else None
     if r.startswith("Z2F"):
         return ("zone2_source", INPUT_BY_CODE.get(r[3:5]))
     if r.startswith("Z3F"):
@@ -148,7 +170,7 @@ def parse_reply(line: str) -> tuple[str, Any] | None:
         # but the set-command table is keyed by 3-digit codes (006). Normalise.
         code = f"{int(raw):03d}" if raw.isdigit() else raw
         return ("listening_mode_set", SET_LISTENING_MODES.get(code, f"SR{raw}"))
-    if r.startswith("TO"):
+    if r.startswith("TO") and len(r) > 2:
         return ("tone", r[2] == "1")
     if r.startswith("BA"):
         return ("bass_code", _int(r[2:]))
