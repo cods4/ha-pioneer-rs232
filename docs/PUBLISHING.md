@@ -20,10 +20,13 @@ URL), complete the steps below. Reference:
 
 ## Remaining steps
 
-1. **Brand assets** — add `icon.png` (256×256) and `logo.png` to
-   [home-assistant/brands](https://github.com/home-assistant/brands) under
-   `custom_integrations/pioneer_rs232/`. Assets are ready in `images/`.
-   Once merged, remove `ignore: brands` from `validate.yml`.
+1. **Brand assets** — ready-to-submit files are staged at
+   `brands/custom_integrations/pioneer_rs232/` (`icon.png` 256×256,
+   `icon@2x.png` 512×512; square, trimmed, optimized). To publish, copy that
+   `custom_integrations/pioneer_rs232/` folder into a fork of
+   [home-assistant/brands](https://github.com/home-assistant/brands) and open a
+   PR. Regenerate with `uv run python images/generate_icon.py`. Once the brands
+   PR is merged, remove `ignore: brands` from `.github/workflows/validate.yml`.
 
 2. **Green CI** — ensure the Validate workflow passes on `main`.
 

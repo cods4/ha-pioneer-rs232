@@ -155,11 +155,32 @@ def save(img: Image.Image, name: str, size: int | None) -> None:
     print(f"wrote {name}  {out.size}")
 
 
+def save_brand(icon: Image.Image) -> None:
+    """Emit home-assistant/brands assets (custom_integrations/pioneer_rs232).
+
+    Requires square icons, exactly 256 and 512 px, trimmed (non-transparent
+    pixels touch all four edges) and optimized.
+    """
+    brand_dir = os.path.normpath(
+        os.path.join(HERE, "..", "brands", "custom_integrations", "pioneer_rs232")
+    )
+    os.makedirs(brand_dir, exist_ok=True)
+    for name, size in (("icon.png", 256), ("icon@2x.png", 512)):
+        out = icon.resize((size, size), Image.LANCZOS)
+        bbox = out.getbbox()
+        assert out.size == (size, size), out.size
+        assert bbox == (0, 0, size, size), f"{name} not trimmed: bbox={bbox}"
+        path = os.path.join(brand_dir, name)
+        out.save(path, optimize=True)
+        print(f"wrote brands/.../{name}  {out.size}  trimmed={bbox == (0, 0, size, size)}")
+
+
 def main() -> None:
     icon = build_icon()
     save(icon, "icon.png", OUT)
     save(icon, "icon-256.png", 256)
     save(build_logo(), "logo.png", None)
+    save_brand(icon)
 
 
 if __name__ == "__main__":
