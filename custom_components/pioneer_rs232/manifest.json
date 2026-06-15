@@ -18,5 +18,5 @@
   "requirements": [
     "serialx>=1.8.0"
   ],
-  "version": "0.3.3"
+  "version": "0.4.0"
 }

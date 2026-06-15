@@ -25,8 +25,10 @@ async def async_setup_entry(hass: HomeAssistant, entry: PioneerConfigEntry) -> b
     receiver = PioneerReceiver(port)
 
     try:
+        # Connect only — do not query here. Querying sends serial commands,
+        # which wake the receiver from standby. The media player restores the
+        # last power state and refreshes only if it was on.
         await receiver.connect()
-        await receiver.query_state()
     except (ConnectionError, OSError, TimeoutError) as err:
         LOGGER.error("Error connecting to Pioneer receiver at %s: %s", port, err)
         if receiver.connected:

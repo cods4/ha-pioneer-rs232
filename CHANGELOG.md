@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.4.0
+- Don't wake the receiver when Home Assistant starts. The integration no
+  longer sends anything on connect (no wake nudge) and no longer queries state
+  at startup — both woke the amplifier from standby. The media player now
+  restores its last power state across restarts and only refreshes the full
+  status if it was on (safe, since an already-on unit won't wake).
+
 ## 0.3.3
 - Detect manual power-off: the receiver sends its power-off status without a
   CR/LF terminator, so the read loop never processed it. It now flushes a

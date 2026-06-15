@@ -121,10 +121,9 @@ class PioneerReceiver:
             baudrate=self.baud,
         )
         self._connected = True
-        # Wake-up nudge: deep-standby CPUs drop the first byte(s) of a command.
-        self._writer.write(b"\r")
-        await self._writer.drain()
-        await asyncio.sleep(0.15)
+        # Send nothing on connect (not even a wake nudge): this receiver wakes
+        # from standby on any serial input, which would power it on when Home
+        # Assistant starts. power_on() handles its own deep-standby wake.
         self._read_task = asyncio.create_task(self._read_loop())
 
     async def disconnect(self) -> None:
@@ -257,13 +256,13 @@ class PioneerReceiver:
             # Main zone just came on (e.g. front-panel power button): the unit
             # is now awake, so pull a full status refresh safely.
             if field_name == "power" and new is True and self.state.power is not True:
-                self._schedule_refresh()
+                self.request_refresh()
             setattr(self.state, field_name, new)
         else:
             setattr(self.state, field_name, value)
         self._notify(self.state)
 
-    def _schedule_refresh(self) -> None:
+    def request_refresh(self) -> None:
         """Query full state once, unless a refresh is already in flight."""
         if not self._connected:
             return

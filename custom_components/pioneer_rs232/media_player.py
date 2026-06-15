@@ -18,6 +18,7 @@ from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers import config_validation as cv, entity_platform
 from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
+from homeassistant.helpers.restore_state import RestoreEntity
 
 SERVICE_SEND_COMMAND = "send_command"
 ATTR_COMMAND = "command"
@@ -93,7 +94,7 @@ async def async_setup_entry(
     )
 
 
-class PioneerMediaPlayer(MediaPlayerEntity):
+class PioneerMediaPlayer(MediaPlayerEntity, RestoreEntity):
     """A Pioneer receiver zone controlled over RS-232."""
 
     _attr_device_class = MediaPlayerDeviceClass.RECEIVER
@@ -150,8 +151,27 @@ class PioneerMediaPlayer(MediaPlayerEntity):
         self._async_update_from_player()
 
     async def async_added_to_hass(self) -> None:
-        """Subscribe to receiver state updates."""
+        """Subscribe to updates and restore the last known power state.
+
+        Nothing is queried at startup (that would wake the receiver). Instead
+        the main zone restores its last power state and, only if it was on,
+        requests a full refresh — safe, since an already-on unit won't wake.
+        """
+        await super().async_added_to_hass()
         self.async_on_remove(self._receiver.subscribe(self._async_on_state_update))
+
+        if not self._is_main:
+            return
+        last_state = await self.async_get_last_state()
+        if last_state is None or last_state.state not in (
+            MediaPlayerState.ON,
+            MediaPlayerState.OFF,
+        ):
+            return
+        was_on = last_state.state == MediaPlayerState.ON
+        self._receiver.set_optimistic_power(was_on)
+        if was_on:
+            self._receiver.request_refresh()
 
     @callback
     def _async_on_state_update(self, state: ReceiverState | None) -> None:
