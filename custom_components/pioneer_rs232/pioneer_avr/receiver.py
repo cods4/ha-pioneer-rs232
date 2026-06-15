@@ -214,7 +214,18 @@ class PioneerReceiver:
         buffer = b""
         try:
             while True:
-                data = await self._reader.read(256)
+                # While a partial line is buffered, time out so we can flush it:
+                # some units (the VSX-LX70 on power-off) send a status message
+                # without a CR/LF terminator. When idle with nothing buffered,
+                # block indefinitely.
+                timeout = 0.25 if buffer else None
+                try:
+                    data = await asyncio.wait_for(self._reader.read(256), timeout)
+                except asyncio.TimeoutError:
+                    if buffer.strip():
+                        self._handle_line(buffer.decode("ascii", "replace"))
+                    buffer = b""
+                    continue
                 if not data:
                     break  # EOF / port closed
                 buffer = (buffer + data).replace(b"\r", b"\n")

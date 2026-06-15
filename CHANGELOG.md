@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.3
+- Detect manual power-off: the receiver sends its power-off status without a
+  CR/LF terminator, so the read loop never processed it. It now flushes a
+  buffered partial line when the serial link goes idle, so unterminated
+  messages (like the power-off `PWR1`) are handled.
+
 ## 0.3.2
 - Tolerate leading line-noise on power-up: the receiver prepends junk to its
   first message as the RS-232 line settles (e.g. `P\x00PWR0`), which previously
